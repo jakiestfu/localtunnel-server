@@ -440,7 +440,7 @@ function $2685e5b20c9f29f6$export$2e2bcd8739ae039(opt) {
         ctx.body = info;
         return;
     });
-    const server = (0, ($parcel$interopDefault($dDqCW$http))).createServer();
+    const server = opts.server || (0, ($parcel$interopDefault($dDqCW$http))).createServer();
     const appCallback = app.callback();
     server.on("request", (req, res)=>{
         // without a hostname, we won't know who the request is for
