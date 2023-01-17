@@ -113,7 +113,7 @@ export default function(opt) {
         return;
     });
 
-    const server = opts.server || http.createServer();
+    const server = opt.server || http.createServer();
 
     const appCallback = app.callback();
 
