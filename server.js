@@ -82,18 +82,20 @@ export default function(opt) {
     // anything after the / path is a request for a specific client name
     // This is a backwards compat feature
     app.use(async (ctx, next) => {
+        console.log('KOA APP REQUEST HAPPENING', ctx.request.path)
         const parts = ctx.request.path.split('/');
 
         // any request with several layers of paths is not allowed
         // rejects /foo/bar
         // allow /foo
         if (parts.length !== 2) {
+            console.log('SKIPPING', parts.length)
             await next();
             return;
         }
 
         const reqId = parts[1];
-
+        console.log('REQ ID', reqId)
         // limit requested hostnames to 63 characters
         if (! /^(?:[a-z0-9][a-z0-9\-]{4,63}[a-z0-9]|[a-z0-9]{4,63})$/.test(reqId)) {
             const msg = 'Invalid subdomain. Subdomains must be lowercase and between 4 and 63 alphanumeric characters.';
@@ -106,13 +108,18 @@ export default function(opt) {
 
         debug('making new client with id %s', reqId);
         const info = await manager.newClient(reqId);
-
+        console.log('MADE NEW CLIENT', {info, host: ctx.request.host})
         const url = schema + '://' + info.id + '.' + ctx.request.host;
         info.url = url;
         ctx.body = info;
         return;
     });
 
+    if (opt.server) {
+        console.log('USING PROVIDED SERVER', opt)
+    } else {
+        console.log('CREATING DEFAULT HTTP SERVER')
+    }
     const server = opt.server || http.createServer();
 
     const appCallback = app.callback();
@@ -128,14 +135,16 @@ export default function(opt) {
 
         const clientId = GetClientIdFromHostname(hostname);
         if (!clientId) {
+            console.log('NO CLIENT ID FROM HOSTNAME?', {hostname, clientId})
             appCallback(req, res);
             return;
         }
 
         const client = manager.getClient(clientId);
         if (!client) {
+            console.log('NO CLIENT', {clientId, client, manager})
             res.statusCode = 404;
-            res.end('404');
+            res.end('404 NO CLIENT YO');
             return;
         }
 
