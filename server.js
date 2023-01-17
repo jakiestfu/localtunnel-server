@@ -116,8 +116,10 @@ export default function(opt) {
         debug('making new client with id %s', reqId);
         const info = await manager.newClient(reqId);
        debug('MADE NEW CLIENT %O', {info, host: ctx.request.host})
-        const url = schema + '://' + info.id + '.' + ctx.request.host;
+        // const url = schema + '://' + info.id + '.' + ctx.request.host;
+        const url = schema + '://' + info.id + '.' + opt.domain || ctx.request.host;
         info.url = url;
+        info.ip = opt.ip
         ctx.body = info;
         return;
     });

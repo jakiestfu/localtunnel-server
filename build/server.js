@@ -448,8 +448,10 @@ function $2685e5b20c9f29f6$export$2e2bcd8739ae039(opt) {
             info: info,
             host: ctx.request.host
         });
-        const url = schema + "://" + info.id + "." + ctx.request.host;
+        // const url = schema + '://' + info.id + '.' + ctx.request.host;
+        const url = schema + "://" + info.id + "." + opt.domain || ctx.request.host;
         info.url = url;
+        info.ip = opt.ip;
         ctx.body = info;
         return;
     });
