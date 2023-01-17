@@ -67,7 +67,7 @@ class $dd3f459a68264663$var$Client extends (0, ($parcel$interopDefault($dDqCW$ev
         // TODO(roman): an agent error removes the client, the user needs to re-connect?
         // how does a user realize they need to re-connect vs some random client being assigned same port?
         agent.once("error", (err)=>{
-            this.debug("AGENT ERROR %s", err);
+            this.debug("AGENT ERROR %O", err);
             this.close();
         });
     }
@@ -405,12 +405,13 @@ function $2685e5b20c9f29f6$export$2e2bcd8739ae039(opt) {
             const reqId = (0, $dDqCW$humanreadableids.hri).random();
             $2685e5b20c9f29f6$var$debug("making new client with id %s", reqId);
             const info = await manager.newClient(reqId);
-            const url = schema + "://" + info.id + "." + ctx.request.host;
+            const url = schema + "://" + info.id + "." + opt.domain || ctx.request.host;
             info.url = url;
             if (opt.ip) {
-                $2685e5b20c9f29f6$var$debug("IP ASSIGNED %s", info.ip);
                 info.ip = opt.ip;
+                $2685e5b20c9f29f6$var$debug("IP ASSIGNED %O", info);
             } else $2685e5b20c9f29f6$var$debug("NO IP ASSIGNED %O", opt);
+            $2685e5b20c9f29f6$var$debug("INFO %O", info);
             ctx.body = info;
             return;
         }

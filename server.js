@@ -69,14 +69,15 @@ export default function(opt) {
             debug('making new client with id %s', reqId);
             const info = await manager.newClient(reqId);
 
-            const url = schema + '://' + info.id + '.' + ctx.request.host;
+            const url = schema + '://' + info.id + '.' + opt.domain || ctx.request.host;
             info.url = url;
             if (opt.ip) {
-               debug('IP ASSIGNED %s', info.ip)
                 info.ip = opt.ip;
+                debug('IP ASSIGNED %O', info)
             } else {
                debug('NO IP ASSIGNED %O', opt)
             }
+            debug('INFO %O', info)
             ctx.body = info;
             return;
         }
@@ -101,7 +102,7 @@ export default function(opt) {
         }
 
         const reqId = parts[1];
-       debug('REQ ID', reqId)
+        debug('REQ ID', reqId)
         // limit requested hostnames to 63 characters
         if (! /^(?:[a-z0-9][a-z0-9\-]{4,63}[a-z0-9]|[a-z0-9]{4,63})$/.test(reqId)) {
             const msg = 'Invalid subdomain. Subdomains must be lowercase and between 4 and 63 alphanumeric characters.';
