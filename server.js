@@ -71,6 +71,12 @@ export default function(opt) {
 
             const url = schema + '://' + info.id + '.' + ctx.request.host;
             info.url = url;
+            if (opt.ip) {
+                console.log('IP ASSIGNED', info.ip)
+                info.ip = opt.ip;
+            } else {
+                console.log('NO IP ASSIGNED', opt)
+            }
             ctx.body = info;
             return;
         }

@@ -406,6 +406,10 @@ function $2685e5b20c9f29f6$export$2e2bcd8739ae039(opt) {
             const info = await manager.newClient(reqId);
             const url = schema + "://" + info.id + "." + ctx.request.host;
             info.url = url;
+            if (opt.ip) {
+                console.log("IP ASSIGNED", info.ip);
+                info.ip = opt.ip;
+            } else console.log("NO IP ASSIGNED", opt);
             ctx.body = info;
             return;
         }
